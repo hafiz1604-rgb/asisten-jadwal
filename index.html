@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pekerjaan Saya</title>
+    <title>Dashboard Pengelolaan SPBE & Pekerjaan Utama</title>
     <style>
         :root {
-            --bg-color: #f0f2f5;
+            --bg-color: #f4f6f9;
             --card-bg: #ffffff;
             --primary: #4f46e5;
             --success: #10b981;
@@ -14,6 +14,13 @@
             --danger: #ef4444;
             --text: #1f2937;
             --text-muted: #6b7280;
+            
+            /* Warna Kategori Pekerjaan Utama */
+            --cat-jip: #06b6d4;      /* Cyan */
+            --cat-splp: #3b82f6;     /* Biru */
+            --cat-pdn: #8b5cf6;      /* Ungu */
+            --cat-portal: #ec4899;   /* Pink */
+            --cat-umum: #6b7280;     /* Abu-abu */
         }
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -23,13 +30,19 @@
             padding: 20px;
         }
         .dashboard {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
         h1 {
             text-align: center;
             color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
             margin-bottom: 25px;
+            font-size: 14px;
         }
         /* Grid Statistik */
         .stats-grid {
@@ -55,7 +68,7 @@
             font-size: 24px;
             font-weight: bold;
         }
-        /* Form & Konten */
+        /* Form Input */
         .main-card {
             background: var(--card-bg);
             padding: 25px;
@@ -65,42 +78,58 @@
         }
         .form-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .form-row-subs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
             margin-bottom: 15px;
         }
         @media (max-width: 600px) {
-            .form-row { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr; }
+            .form-row, .form-row-subs, .stats-grid { grid-template-columns: 1fr; }
         }
         input, select, button {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 11px;
+            border: 1px solid #dee2e6;
             border-radius: 6px;
             font-size: 14px;
             box-sizing: border-box;
+            width: 100%;
         }
-        button {
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        button.btn-submit {
             background-color: var(--primary);
             color: white;
             border: none;
             cursor: pointer;
             font-weight: bold;
+            font-size: 15px;
             transition: background 0.2s;
         }
-        button:hover { background-color: #4338ca; }
+        button.btn-submit:hover { background-color: #4338ca; }
         /* Filter Tab */
         .filter-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .filter-btn {
             background: #e5e7eb;
             color: var(--text);
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 13px;
+            border: none;
+            cursor: pointer;
+            width: auto;
         }
         .filter-btn.active {
             background: var(--primary);
@@ -112,36 +141,50 @@
             background: #f9fafb;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 5px solid #ccc;
+            border-left: 6px solid #ccc;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
-        li.priority-Tinggi { border-left-color: var(--danger); }
-        li.priority-Sedang { border-left-color: var(--warning); }
-        li.priority-Rendah { border-left-color: var(--success); }
+        /* Penanda Samping Berdasarkan Kategori */
+        li.cat-JIP { border-left-color: var(--cat-jip); }
+        li.cat-SPLP { border-left-color: var(--cat-splp); }
+        li.cat-PDN { border-left-color: var(--cat-pdn); }
+        li.cat-Portal { border-left-color: var(--cat-portal); }
+        li.cat-Umum { border-left-color: var(--cat-umum); }
+        
         li.completed {
-            border-left-color: #d1d5db;
+            border-left-color: #d1d5db !important;
             background-color: #f3f4f6;
-            opacity: 0.6;
+            opacity: 0.55;
         }
-        li.completed .task-title { text-decoration: line-through; }
+        li.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
+        
         .task-details { flex-grow: 1; margin-right: 15px; }
-        .task-title { font-weight: 600; display: block; }
-        .task-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .task-title { font-weight: 600; display: block; font-size: 15px; }
+        .task-meta { font-size: 12px; color: var(--text-muted); margin-top: 5px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        
+        /* Badges */
         .badge {
-            padding: 2px 6px;
+            padding: 2px 7px;
             border-radius: 4px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
             color: white;
-            margin-left: 5px;
         }
-        .bg-Tinggi { background-color: var(--danger); }
-        .bg-Sedang { background-color: var(--warning); }
-        .bg-Rendah { background-color: var(--success); }
+        .bg-priority-Tinggi { background-color: var(--danger); }
+        .bg-priority-Sedang { background-color: var(--warning); }
+        .bg-priority-Rendah { background-color: var(--success); }
+        
+        .badge-cat { color: white; font-weight: 500; }
+        .bg-cat-JIP { background-color: var(--cat-jip); }
+        .bg-cat-SPLP { background-color: var(--cat-splp); }
+        .bg-cat-PDN { background-color: var(--cat-pdn); }
+        .bg-cat-Portal { background-color: var(--cat-portal); }
+        .bg-cat-Umum { background-color: var(--cat-umum); }
+
         .delete-btn {
             background: transparent;
             color: var(--text-muted);
@@ -149,51 +192,62 @@
             cursor: pointer;
             font-size: 16px;
             padding: 5px;
+            width: auto;
         }
         .delete-btn:hover { color: var(--danger); }
-        .action-area { display: flex; align-items: center; gap: 10px; }
+        .action-area { display: flex; align-items: center; gap: 12px; }
     </style>
 </head>
 <body>
 
 <div class="dashboard">
-    <h1>💼 Dashboard Pekerjaan Saya</h1>
+    <h1>💼 Dashboard Ruang Kerja SPBE</h1>
+    <div class="subtitle">Sistem Monitor Tugas Internal Mandiri</div>
     
     <!-- Row Statistik -->
     <div class="stats-grid">
         <div class="stat-card">
-            <h3>Total Tugas</h3>
+            <h3>Total Pekerjaan</h3>
             <p id="totalTasks" style="color: var(--primary);">0</p>
         </div>
         <div class="stat-card">
-            <h3>Tertunda</h3>
+            <h3>Belum Selesai</h3>
             <p id="pendingTasks" style="color: var(--warning);">0</p>
         </div>
         <div class="stat-card">
-            <h3>Selesai</h3>
+            <h3>Sudah Selesai</h3>
             <p id="completedTasks" style="color: var(--success);">0</p>
         </div>
     </div>
 
-    <!-- Area Input -->
+    <!-- Area Input Tugas -->
     <div class="main-card">
         <div class="form-row">
-            <input type="text" id="taskName" placeholder="Nama Pekerjaan / Project Baru...">
-            <input type="datetime-local" id="taskTime">
-            <select id="taskPriority">
-                <option value="Rendah">Prioritas: Rendah</option>
-                <option value="Sedang">Prioritas: Sedang</option>
-                <option value="Tinggi">Prioritas: Tinggi</option>
+            <input type="text" id="taskName" placeholder="Tulis rincian penugasan atau progres kerja baru...">
+            <select id="taskCategory">
+                <option value="JIP">💼 Pengelolaan JIP</option>
+                <option value="SPLP">🔗 Pengelolaan SPLP</option>
+                <option value="PDN">🖥️ Pengelolaan PDN</option>
+                <option value="Portal">🌐 Pengelolaan Portal Pelayanan</option>
+                <option value="Umum">📌 Tugas Umum/Lainnya</option>
             </select>
         </div>
-        <button style="width: 100%; py: 12px;" onclick="addTask()">➕ Tambahkan ke Dashboard</button>
+        <div class="form-row-subs">
+            <input type="datetime-local" id="taskTime">
+            <select id="taskPriority">
+                <option value="Rendah">Prioritas: Normal / Rendah</option>
+                <option value="Sedang">Prioritas: Sedang (Urgent)</option>
+                <option value="Tinggi">Prioritas: Tinggi (Critical)</option>
+            </select>
+        </div>
+        <button class="btn-submit" onclick="addTask()">➕ Tambah ke Track Dashboard</button>
     </div>
 
-    <!-- Area Daftar & Filter -->
+    <!-- Area Daftar & Filter Kategori/Status -->
     <div class="main-card">
         <div class="filter-tabs">
-            <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Semua</button>
-            <button class="filter-btn" id="filter-pending" onclick="setFilter('pending')">⏳ Tertunda</button>
+            <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Semua Agenda</button>
+            <button class="filter-btn" id="filter-pending" onclick="setFilter('pending')">⏳ Belum Selesai</button>
             <button class="filter-btn" id="filter-completed" onclick="setFilter('completed')">✅ Selesai</button>
         </div>
         
@@ -210,26 +264,29 @@
 
     function addTask() {
         const nameInput = document.getElementById("taskName");
+        const categoryInput = document.getElementById("taskCategory");
         const timeInput = document.getElementById("taskTime");
         const priorityInput = document.getElementById("taskPriority");
 
         if (nameInput.value.trim() === "" || timeInput.value === "") {
-            alert("Mohon isi nama pekerjaan dan target waktunya!");
+            alert("Mohon isi deskripsi pekerjaan dan target batas waktunya!");
             return;
         }
 
         const task = {
             id: Date.now(),
             name: nameInput.value,
+            category: categoryInput.value,
             time: formatTime(timeInput.value),
             priority: priorityInput.value,
             completed: false
         };
 
-        const tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
+        const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
         tasks.push(task);
-        localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
+        localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
 
+        // Reset Input form
         nameInput.value = "";
         timeInput.value = "";
         priorityInput.value = "Rendah";
@@ -243,20 +300,22 @@
     }
 
     function toggleTask(id) {
-        let tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
+        let tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
         tasks = tasks.map(task => {
             if (task.id === id) task.completed = !task.completed;
             return task;
         });
-        localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
+        localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
         updateDashboard();
     }
 
     function deleteTask(id) {
-        let tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
-        tasks = tasks.filter(task => task.id !== id);
-        localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
-        updateDashboard();
+        if(confirm("Hapus log pekerjaan ini dari riwayat dashboard?")) {
+            let tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
+            tasks = tasks.filter(task => task.id !== id);
+            localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
+            updateDashboard();
+        }
     }
 
     function setFilter(filter) {
@@ -267,11 +326,11 @@
     }
 
     function updateDashboard() {
-        const tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
+        const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
         const ul = document.getElementById("taskList");
         ul.innerHTML = "";
 
-        // Hitung Statistik
+        // Hitung akumulasi statistik dashboard
         const total = tasks.length;
         const completed = tasks.filter(t => t.completed).length;
         const pending = total - completed;
@@ -280,21 +339,33 @@
         document.getElementById("pendingTasks").innerText = pending;
         document.getElementById("completedTasks").innerText = completed;
 
-        // Filter & Tampilkan Tugas
+        // Tampilkan item agenda kerja berdasarkan aturan filter
         tasks.forEach(task => {
             if (currentFilter === 'pending' && task.completed) return;
             if (currentFilter === 'completed' && !task.completed) return;
 
             const li = document.createElement("li");
-            li.className = `priority-${task.priority} ${task.completed ? 'completed' : ''}`;
+            li.className = `cat-${task.category} ${task.completed ? 'completed' : ''}`;
             
+            // Nama panjang untuk tampilan badge teks kategori
+            let labelKategori = "";
+            if(task.category === 'JIP') labelKategori = "Pengelolaan JIP";
+            else if(task.category === 'SPLP') labelKategori = "Pengelolaan SPLP";
+            else if(task.category === 'PDN') labelKategori = "Pengelolaan PDN";
+            else if(task.category === 'Portal') labelKategori = "Portal Pelayanan";
+            else labelKategori = "Umum";
+
             li.innerHTML = `
                 <div class="task-details">
                     <span class="task-title">${task.name}</span>
-                    <span class="task-meta">⏱️ ${task.time} <span class="badge bg-${task.priority}">${task.priority}</span></span>
+                    <div class="task-meta">
+                        <span>⏱️ Target: ${task.time}</span>
+                        <span class="badge badge-cat bg-cat-${task.category}">${labelKategori}</span>
+                        <span class="badge bg-priority-${task.priority}">Prioritas: ${task.priority}</span>
+                    </div>
                 </div>
                 <div class="action-area">
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})" style="transform: scale(1.2); cursor:pointer;">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})" style="transform: scale(1.3); cursor:pointer;">
                     <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
                 </div>
             `;
