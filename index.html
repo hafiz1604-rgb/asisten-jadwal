@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Kerja SPBE - Multi Tab & Grafik</title>
+    <title>Dashboard SPBE - AI Chatbot Assistant</title>
     <style>
         :root {
             --bg-color: #f4f6f9;
@@ -28,112 +28,37 @@
             margin: 0;
             padding: 20px;
         }
-        .dashboard {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        .dashboard { max-width: 1000px; margin: 0 auto; }
         h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
         .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 14px; }
         
-        .alert-banner {
-            background-color: var(--danger);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            text-align: center;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
+        .alert-banner { background-color: var(--danger); color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none; text-align: center; font-weight: bold; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
-        /* navigasi Halaman Utama (Tabs) */
-        .page-navigation {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-        .nav-tab {
-            background: #e5e7eb;
-            color: var(--text);
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
+        /* Navigasi Halaman */
+        .page-navigation { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+        .nav-tab { background: #e5e7eb; color: var(--text); padding: 12px 18px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
         .nav-tab.active { background-color: var(--primary); color: white; box-shadow: 0 4px 6px rgba(79,70,229,0.2); }
         .nav-tab#tab-JIP.active { background-color: var(--cat-jip); }
         .nav-tab#tab-SPLP.active { background-color: var(--cat-splp); }
         .nav-tab#tab-PDN.active { background-color: var(--cat-pdn); }
         .nav-tab#tab-Portal.active { background-color: var(--cat-portal); }
 
-        /* Layout Grid Konten Halaman */
-        .page-layout {
-            display: grid;
-            grid-template-columns: 2.5fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 850px) {
-            .page-layout { grid-template-columns: 1fr; }
-        }
+        /* Layout Grid */
+        .page-layout { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; }
+        @media (max-width: 850px) { .page-layout { grid-template-columns: 1fr; } }
 
-        /* Kotak Fitur */
-        .main-card {
-            background: var(--card-bg);
-            padding: 22px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
-        }
+        .main-card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 20px; }
         .card-title { margin-top: 0; margin-bottom: 12px; font-size: 16px; color: var(--text); display: flex; align-items: center; gap: 8px; font-weight: bold; }
 
-        /* Grafik Progres Visual */
-        .progress-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-        }
-        .progress-circle {
-            position: relative;
-            width: 120px;
-            height: 120px;
-        }
-        .progress-circle svg {
-            width: 120px;
-            height: 120px;
-            transform: rotate(-90deg);
-        }
-        .progress-circle circle {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke-width: 10;
-            stroke-linecap: round;
-        }
+        /* Grafik Progres */
+        .progress-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .progress-circle { position: relative; width: 120px; height: 120px; }
+        .progress-circle svg { width: 120px; height: 120px; transform: rotate(-90deg); }
+        .progress-circle circle { width: 100%; height: 100%; fill: none; stroke-width: 10; stroke-linecap: round; }
         .progress-circle .bg-ring { stroke: #e5e7eb; }
-        .progress-circle .progress-ring {
-            stroke: var(--primary);
-            stroke-dasharray: 345;
-            stroke-dashoffset: 345;
-            transition: stroke-dashoffset 0.5s ease;
-        }
-        .progress-percentage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            font-weight: bold;
-        }
+        .progress-circle .progress-ring { stroke: var(--primary); stroke-dasharray: 345; stroke-dashoffset: 345; transition: stroke-dashoffset 0.5s ease; }
+        .progress-percentage { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 22px; font-weight: bold; }
 
         /* AI Section */
         .ai-box { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); border: 1px solid #c7d2fe; }
@@ -141,59 +66,66 @@
         
         input, select, button, textarea { padding: 11px; border: 1px solid #dee2e6; border-radius: 6px; font-size: 14px; box-sizing: border-box; width: 100%; }
         textarea { resize: vertical; font-family: inherit; }
-        
         button { background-color: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; width: auto; }
         button.btn-ai { background-color: #7c3aed; }
-        button.btn-ai:hover { background-color: #6d28d9; }
 
-        /* Status Filter Sub-tab */
+        /* Filter Tab */
         .filter-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
         .filter-btn { background: #e5e7eb; color: var(--text); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: none; cursor: pointer; }
         .filter-btn.active { background: #374151; color: white; }
         
         /* Daftar Tugas */
         ul { list-style: none; padding: 0; margin: 0; }
-        li {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 6px solid #ccc;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.01);
-        }
+        li { background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #ccc; box-shadow: 0 1px 2px rgba(0,0,0,0.01); }
         li.cat-JIP { border-left-color: var(--cat-jip); }
         li.cat-SPLP { border-left-color: var(--cat-splp); }
         li.cat-PDN { border-left-color: var(--cat-pdn); }
         li.cat-Portal { border-left-color: var(--cat-portal); }
         li.cat-Umum { border-left-color: var(--cat-umum); }
-        
         li.completed { border-left-color: #d1d5db !important; background-color: #f3f4f6; opacity: 0.55; }
         li.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
         li.critical-alert { animation: borderBlink 1s infinite alternate; background-color: #fef2f2; }
-        
         @keyframes borderBlink { from { border-right: 0px solid transparent; } to { border-right: 5px solid var(--danger); } }
 
         .task-details { flex-grow: 1; margin-right: 15px; }
         .task-title { font-weight: 600; display: block; font-size: 15px; }
         .task-meta { font-size: 12px; color: var(--text-muted); margin-top: 5px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        
         .badge { padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; }
         .bg-priority-Tinggi { background-color: var(--danger); }
         .bg-priority-Sedang { background-color: var(--warning); }
         .bg-priority-Rendah { background-color: var(--success); }
-        
         .badge-cat { color: white; font-weight: 500; }
         .bg-cat-JIP { background-color: var(--cat-jip); }
         .bg-cat-SPLP { background-color: var(--cat-splp); }
         .bg-cat-PDN { background-color: var(--cat-pdn); }
         .bg-cat-Portal { background-color: var(--cat-portal); }
-
         .delete-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 16px; padding: 5px; width: auto; }
         .delete-btn:hover { color: var(--danger); }
         .action-area { display: flex; align-items: center; gap: 12px; }
+
+        /* ==================== FITUR CHATBOT AI WINDOW ==================== */
+        .chat-widget-btn {
+            position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px;
+            background-color: #7c3aed; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 28px; color: white; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(124,58,237,0.4); z-index: 1000; transition: transform 0.2s;
+        }
+        .chat-widget-btn:hover { transform: scale(1.1); }
+        
+        .chat-window {
+            position: fixed; bottom: 95px; right: 25px; width: 360px; height: 460px;
+            background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid #e5e7eb;
+        }
+        .chat-header { background: #7c3aed; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .chat-close { cursor: pointer; font-size: 20px; }
+        .chat-messages { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f8fafc; }
+        .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; }
+        .msg.bot { background-color: #e0e7ff; color: #1e1b4b; align-self: flex-start; border-radius-left-bottom: 0; }
+        .msg.user { background-color: #7c3aed; color: white; align-self: flex-end; border-radius-right-bottom: 0; }
+        .chat-footer { padding: 10px; display: flex; gap: 8px; background: white; border-top: 1px solid #e5e7eb; }
+        .chat-footer input { flex-grow: 1; padding: 8px 12px; font-size: 14px; }
+        .chat-footer button { padding: 8px 15px; background: #7c3aed; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -204,7 +136,7 @@
     
     <div id="alertBanner" class="alert-banner">⚠️ PEMBERITAHUAN: Ada pekerjaan kritis di halaman ini yang mendekati batas waktu!</div>
 
-    <!-- 1. NAVIGASI HALAMAN UTAMA (TABS) -->
+    <!-- Navigasi Halaman Utama -->
     <div class="page-navigation">
         <button class="nav-tab active" id="tab-all" onclick="switchPage('all')">📂 Semua Bidang</button>
         <button class="nav-tab" id="tab-JIP" onclick="switchPage('JIP')">💼 Pengelolaan JIP</button>
@@ -213,16 +145,14 @@
         <button class="nav-tab" id="tab-Portal" onclick="switchPage('Portal')">🌐 Portal Pelayanan</button>
     </div>
 
-    <!-- 2. LAYOUT HALAMAN HALAMAN UTAMA -->
+    <!-- Layout Utama -->
     <div class="page-layout">
-        
-        <!-- KOLOM KIRI: Manajemen Tugas -->
         <div class="left-column">
             <!-- Kotak AI Input -->
             <div class="main-card ai-box">
                 <h3 class="card-title">✨ Asisten AI Entri Instan</h3>
                 <div class="ai-input-group">
-                    <textarea id="aiPrompt" rows="2" placeholder="Ketik tugas bebas... (Contoh: 'Rapat teknis SPLP besok jam 11 siang penting')"></textarea>
+                    <textarea id="aiPrompt" rows="2" placeholder="Ketik tugas bebas... (Contoh: 'Rapat koordinasi PDN besok jam 2 siang')"></textarea>
                     <button class="btn-ai" id="btnAiProcess" onclick="processWithAILangsung()" style="min-width: 120px;">🤖 Kirim AI</button>
                 </div>
             </div>
@@ -239,20 +169,14 @@
             </div>
         </div>
 
-        <!-- KOLOM KANAN: Statistik & Grafik Progres Halaman Terkait -->
+        <!-- Kolom Kanan: Grafik Progres -->
         <div class="right-column">
             <div class="main-card progress-box">
                 <h3 class="card-title" style="font-size: 14px; margin-bottom: 20px;">📊 Progres Halaman Ini</h3>
-                
-                <!-- Grafik Progres Lingkaran SVG -->
                 <div class="progress-circle">
-                    <svg>
-                        <circle class="bg-ring" cx="60" cy="60" r="55"></circle>
-                        <circle class="progress-ring" id="visualRing" cx="60" cy="60" r="55"></circle>
-                    </svg>
+                    <svg><circle class="bg-ring" cx="60" cy="60" r="55"></circle><circle class="progress-ring" id="visualRing" cx="60" cy="60" r="55"></circle></svg>
                     <div class="progress-percentage" id="visualPercent">0%</div>
                 </div>
-
                 <div style="margin-top: 20px; font-size: 13px; text-align: left; width: 100%; border-top: 1px solid #f3f4f6; padding-top: 15px;">
                     <p style="margin: 5px 0;">Total Kerja: <b id="statTotal" style="float:right;">0</b></p>
                     <p style="margin: 5px 0; color: var(--warning);">Tertunda: <b id="statPending" style="float:right;">0</b></p>
@@ -260,40 +184,124 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
+<!-- ==================== STRUKTUR INTERFAS CHATBOT AI ==================== -->
+<div class="chat-widget-btn" onclick="toggleChatWindow()">💬</div>
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        <span>🤖 Asisten AI Jadwal</span>
+        <span class="chat-close" onclick="toggleChatWindow()">✖</span>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">Halo! Saya asisten jadwal Anda. Silakan tanyakan perihal agenda atau status pekerjaan Anda di dashboard ini. 😊</div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Ada jadwal apa hari ini?..." onkeypress="handleChatKeyPress(event)">
+        <button onclick="sendChatMessage()">Kirim</button>
     </div>
 </div>
 
 <script>
-    let currentPage = 'all';  // Halaman Tab Aktif: 'all', 'JIP', 'SPLP', 'PDN', 'Portal'
-    let currentStatusFilter = 'all'; // Filter Status: 'all', 'pending', 'completed'
+    let currentPage = 'all';
+    let currentStatusFilter = 'all';
 
     document.addEventListener("DOMContentLoaded", () => {
         updateDashboard();
         setInterval(checkDeadlines, 20000);
     });
 
-    // SISTEM NAVIGASI ANTAR HALAMAN PEKERJAAN UTAMA
+    function toggleChatWindow() {
+        const chatWin = document.getElementById("chatWindow");
+        chatWin.style.display = (chatWin.style.display === "flex") ? "none" : "flex";
+    }
+
+    function handleChatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
+
+    // ==================== LOGIKA PENJAWAB OBROLAN AI JADWAL ====================
+    function sendChatMessage() {
+        const inputEl = document.getElementById("chatInput");
+        const query = inputEl.value.trim();
+        if (query === "") return;
+
+        // Tampilkan chat user
+        appendMessage(query, 'user');
+        inputEl.value = "";
+
+        // Efek loading mengetik AI
+        setTimeout(() => {
+            const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
+            const q = query.toLowerCase();
+            let jawaban = "";
+
+            const totalBelumSelesai = tasks.filter(t => !t.completed);
+
+            // 1. Cek Pertanyaan Jadwal Umum / Hari Ini
+            if (q.includes("jadwal") || q.includes("agenda") || q.includes("pekerjaan") || q.includes("tugas")) {
+                let filterKategori = null;
+                if (q.includes("jip")) filterKategori = "JIP";
+                else if (q.includes("splp")) filterKategori = "SPLP";
+                else if (q.includes("pdn")) filterKategori = "PDN";
+                else if (q.includes("portal")) filterKategori = "Portal";
+
+                let listTarget = filterKategori ? totalBelumSelesai.filter(t => t.category === filterKategori) : totalBelumSelesai;
+
+                if (listTarget.length === 0) {
+                    jawaban = filterKategori 
+                        ? `Aman! Tidak ada jadwal atau pekerjaan tertunda untuk bidang **Pengelolaan ${filterKategori}** saat ini.`
+                        : "Bagus! Berdasarkan data dashboard, semua pekerjaan Anda sudah selesai atau belum ada jadwal terdaftar.";
+                } else {
+                    jawaban = `Saat ini ada **${listTarget.length} pekerjaan** yang belum selesai:<br><br>`;
+                    listTarget.forEach((t, index) => {
+                        jawaban += `${index + 1}. [${t.category}] <b>${t.name}</b> (Target: ${t.time})<br>`;
+                    });
+                }
+            } 
+            // 2. Cek waktu spesifik besok
+            else if (q.includes("besok")) {
+                const besokTasks = totalBelumSelesai.filter(t => t.name.toLowerCase().includes("besok"));
+                if (besokTasks.length === 0) {
+                    jawaban = "Sepertinya untuk besok belum ada jadwal khusus yang terdaftar di sistem.";
+                } else {
+                    jawaban = `Untuk besok, ada **${besokTasks.length} agenda**:<br>`;
+                    besokTasks.forEach((t, i) => { jawaban += `- ${t.name} (${t.time})<br>`; });
+                }
+            }
+            // 3. Respon Sapaan / Iseng
+            else if (q.includes("halo") || q.includes("hai") || q.includes("pagi") || q.includes("siang")) {
+                jawaban = "Halo! Ada yang bisa saya bantu perihal pengecekan jadwal kerja Anda hari ini?";
+            } 
+            // 4. Default kalau bingung
+            else {
+                jawaban = "Maaf, saya kurang memahami pertanyaan itu. Anda bisa bertanya seperti: <i>'Ada jadwal apa saja?'</i>, <i>'Apakah ada tugas PDN?'</i>, atau <i>'Ada tugas besok?'</i>.";
+            }
+
+            appendMessage(jawaban, 'bot');
+        }, 500);
+    }
+
+    function appendMessage(text, sender) {
+        const chatBox = document.getElementById("chatMessages");
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `msg ${sender}`;
+        msgDiv.innerHTML = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // FUNGSI UTAMA TRACK DASHBOARD (Sama seperti sebelumnya)
     function switchPage(pageCode) {
         currentPage = pageCode;
-        
-        // Atur Kelas Tombol Tab Aktif
         document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`tab-${pageCode}`).classList.add('active');
-        
-        // Ubah Label Text Halaman
         const labels = { 'all': 'Semua Bidang', 'JIP': 'Pengelolaan JIP', 'SPLP': 'Pengelolaan SPLP', 'PDN': 'Pengelolaan PDN', 'Portal': 'Portal Pelayanan' };
         document.getElementById("pageNameLabel").innerText = labels[pageCode];
-
-        // Ubah Warna Dinamis Cincin Grafik Progres Mengikuti Kategori Halaman
-        const ring = document.getElementById("visualRing");
         const colors = { 'all': '#4f46e5', 'JIP': '#06b6d4', 'SPLP': '#3b82f6', 'PDN': '#8b5cf6', 'Portal': '#ec4899' };
-        ring.style.stroke = colors[pageCode];
-
+        document.getElementById("visualRing").style.stroke = colors[pageCode];
         updateDashboard();
     }
 
-    // PROSES INPUT OTOMATIS ASISTEN AI
     function processWithAILangsung() {
         const promptInput = document.getElementById("aiPrompt");
         const fullText = promptInput.value.trim();
@@ -346,7 +354,6 @@
         localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
         promptInput.value = "";
         document.getElementById("btnAiProcess").innerText = "🤖 Kirim AI";
-        
         updateDashboard();
     }
 
@@ -373,32 +380,25 @@
         updateDashboard();
     }
 
-    // UPDATE TAMPILAN DASHBOARD, FILTER HALAMAN, & GRAFIK PROGRES
     function updateDashboard() {
         const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
         const ul = document.getElementById("taskList");
         ul.innerHTML = "";
 
-        // 1. FILTER BERDASARKAN HALAMAN TAB AKTIF
         const pageTasks = tasks.filter(t => currentPage === 'all' || t.category === currentPage);
-
-        // 2. HITUNG PROGRESS GRAFIK BERDASARKAN HALAMAN TAB AKTIF
         const total = pageTasks.length;
         const completed = pageTasks.filter(t => t.completed).length;
         const pending = total - completed;
         const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-        // Set Angka Teks Statistik
         document.getElementById("statTotal").innerText = total;
         document.getElementById("statPending").innerText = pending;
         document.getElementById("statCompleted").innerText = completed;
         document.getElementById("visualPercent").innerText = `${percent}%`;
 
-        // Atur Animasi Mengalir Ring Grafik SVG (Keliling lingkaran = 2 * pi * r = 2 * 3.14 * 55 = ~345)
         const ringOffset = 345 - (345 * percent) / 100;
         document.getElementById("visualRing").style.strokeDashoffset = ringOffset;
 
-        // 3. FILTER LANJUTAN BERDASARKAN STATUS (Semua/Tertunda/Selesai)
         pageTasks.forEach(task => {
             if (currentStatusFilter === 'pending' && task.completed) return;
             if (currentStatusFilter === 'completed' && !task.completed) return;
@@ -425,11 +425,9 @@
             `;
             ul.appendChild(li);
         });
-
         checkDeadlines();
     }
 
-    // MONITOR SANGAT SEGERA / CRITICAL ALERTS DI HALAMAN YANG DIPILIH
     function checkDeadlines() {
         const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
         const sekarang = new Date();
@@ -438,19 +436,15 @@
         tasks.forEach(task => {
             if (!task.completed && task.rawTime) {
                 const batasWaktu = new Date(task.rawTime);
-                const selisihJam = (batasWaktu - sekarang) / (1000 * 60 * 60);
+                const selisihJam = (batasWaktu - aerospace = batasWaktu - sekarang) / (1000 * 60 * 60);
 
                 if (selisihJam <= 1) {
-                    // Jika tugas ini masuk dalam cakupan halaman tab yang sedang dibuka
-                    if (currentPage === 'all' || task.category === currentPage) {
-                        adaKritisDiHalamanIni = true;
-                    }
+                    if (currentPage === 'all' || task.category === currentPage) adaKritisDiHalamanIni = true;
                     const el = document.getElementById(`task-${task.id}`);
                     if (el) el.classList.add("critical-alert");
                 }
             }
         });
-
         document.getElementById("alertBanner").style.display = adaKritisDiHalamanIni ? "block" : "none";
     }
 </script>
