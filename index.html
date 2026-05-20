@@ -6,135 +6,332 @@
     <title>Dashboard SPBE - AI Chatbot Assistant</title>
     <style>
         :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --primary: #4f46e5;
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(99, 102, 241, 0.15);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
             --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.3);
             --warning: #f59e0b;
             --danger: #ef4444;
-            --text: #1f2937;
-            --text-muted: #6b7280;
+            --danger-glow: rgba(239, 68, 68, 0.4);
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
             
             --cat-jip: #06b6d4;
             --cat-splp: #3b82f6;
-            --cat-pdn: #8b5cf6;
+            --cat-pdn: #a855f7;
             --cat-portal: #ec4899;
             --cat-umum: #6b7280;
         }
+
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
             color: var(--text);
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
         }
-        .dashboard { max-width: 1000px; margin: 0 auto; }
-        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
-        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 14px; }
-        
-        .alert-banner { background-color: var(--danger); color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none; text-align: center; font-weight: bold; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
-        /* Navigasi Halaman */
-        .page-navigation { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
-        .nav-tab { background: #e5e7eb; color: var(--text); padding: 12px 18px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-        .nav-tab.active { background-color: var(--primary); color: white; box-shadow: 0 4px 6px rgba(79,70,229,0.2); }
-        .nav-tab#tab-JIP.active { background-color: var(--cat-jip); }
-        .nav-tab#tab-SPLP.active { background-color: var(--cat-splp); }
-        .nav-tab#tab-PDN.active { background-color: var(--cat-pdn); }
-        .nav-tab#tab-Portal.active { background-color: var(--cat-portal); }
+        .dashboard { max-width: 1100px; margin: 0 auto; }
+        
+        h1 { 
+            text-align: center; 
+            color: #ffffff; 
+            margin-bottom: 5px; 
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+        
+        .subtitle { 
+            text-align: center; 
+            color: var(--text-muted); 
+            margin-bottom: 30px; 
+            font-size: 14px; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Alert Banner Futuristik */
+        .alert-banner { 
+            background: linear-gradient(90deg, rgba(239,68,68,0.2) 0%, rgba(239,68,68,0.05) 100%);
+            color: #fca5a5; 
+            padding: 14px; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            display: none; 
+            text-align: center; 
+            font-weight: bold; 
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Navigasi Halaman Cyber */
+        .page-navigation { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 30px; 
+            overflow-x: auto; 
+            padding: 4px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .nav-tab { 
+            background: transparent; 
+            color: var(--text-muted); 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            border: 1px solid transparent; 
+            cursor: pointer; 
+            white-space: nowrap; 
+            transition: all 0.3s ease; 
+        }
+        
+        .nav-tab:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .nav-tab.active { 
+            color: #fff;
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        
+        .nav-tab#tab-JIP.active { border-color: var(--cat-jip); background: rgba(6, 182, 212, 0.1); box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
+        .nav-tab#tab-SPLP.active { border-color: var(--cat-splp); background: rgba(59, 130, 246, 0.1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .nav-tab#tab-PDN.active { border-color: var(--cat-pdn); background: rgba(168, 85, 247, 0.1); box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+        .nav-tab#tab-Portal.active { border-color: var(--cat-portal); background: rgba(236, 72, 153, 0.1); box-shadow: 0 0 15px rgba(236, 72, 153, 0.3); }
 
         /* Layout Grid */
-        .page-layout { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; }
+        .page-layout { display: grid; grid-template-columns: 2.5fr 1fr; gap: 25px; }
         @media (max-width: 850px) { .page-layout { grid-template-columns: 1fr; } }
 
-        .main-card { background: var(--card-bg); padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 20px; }
-        .card-title { margin-top: 0; margin-bottom: 12px; font-size: 16px; color: var(--text); display: flex; align-items: center; gap: 8px; font-weight: bold; }
-
-        /* Grafik Progres */
-        .progress-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .progress-circle { position: relative; width: 120px; height: 120px; }
-        .progress-circle svg { width: 120px; height: 120px; transform: rotate(-90deg); }
-        .progress-circle circle { width: 100%; height: 100%; fill: none; stroke-width: 10; stroke-linecap: round; }
-        .progress-circle .bg-ring { stroke: #e5e7eb; }
-        .progress-circle .progress-ring { stroke: var(--primary); stroke-dasharray: 345; stroke-dashoffset: 345; transition: stroke-dashoffset 0.5s ease; }
-        .progress-percentage { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 22px; font-weight: bold; }
-
-        /* AI Section */
-        .ai-box { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); border: 1px solid #c7d2fe; }
-        .ai-input-group { display: flex; gap: 10px; }
+        /* Glassmorphism Cards */
+        .main-card { 
+            background: var(--card-bg); 
+            padding: 24px; 
+            border-radius: 14px; 
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-bottom: 25px; 
+        }
         
-        input, select, button, textarea { padding: 11px; border: 1px solid #dee2e6; border-radius: 6px; font-size: 14px; box-sizing: border-box; width: 100%; }
+        .card-title { 
+            margin-top: 0; 
+            margin-bottom: 18px; 
+            font-size: 15px; 
+            color: #ffffff; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Ring Progres Hologram */
+        .progress-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        .progress-circle { position: relative; width: 130px; height: 130px; }
+        .progress-circle svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+        .progress-circle circle { width: 100%; height: 100%; fill: none; stroke-width: 8; stroke-linecap: round; }
+        .progress-circle .bg-ring { stroke: rgba(255,255,255,0.05); }
+        .progress-circle .progress-ring { stroke: var(--primary); stroke-dasharray: 345; stroke-dashoffset: 345; transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(0 0 6px var(--primary)); }
+        .progress-percentage { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: 800; color: #fff; font-family: monospace; }
+
+        /* AI Section Glow */
+        .ai-box { 
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%); 
+            border: 1px solid rgba(99, 102, 241, 0.3); 
+            box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+        .ai-input-group { display: flex; gap: 12px; }
+        
+        textarea, input, select { 
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            padding: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 8px; 
+            font-size: 14px; 
+            box-sizing: border-box; 
+            width: 100%; 
+            transition: all 0.3s;
+        }
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
         textarea { resize: vertical; font-family: inherit; }
-        button { background-color: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; width: auto; }
-        button.btn-ai { background-color: #7c3aed; }
+        
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer; 
+            font-weight: bold; 
+            width: auto; 
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+        button.btn-ai { 
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%); 
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+        }
+        button.btn-ai:hover {
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+        }
 
         /* Filter Tab */
-        .filter-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-        .filter-btn { background: #e5e7eb; color: var(--text); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: none; cursor: pointer; }
-        .filter-btn.active { background: #374151; color: white; }
+        .filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .filter-btn { background: rgba(255,255,255,0.05); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 12px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s; }
+        .filter-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .filter-btn.active { background: rgba(255,255,255,0.15); color: white; border-color: rgba(255,255,255,0.2); }
         
-        /* Daftar Tugas */
+        /* Daftar Tugas Neon List */
         ul { list-style: none; padding: 0; margin: 0; }
-        li { background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #ccc; box-shadow: 0 1px 2px rgba(0,0,0,0.01); }
-        li.cat-JIP { border-left-color: var(--cat-jip); }
-        li.cat-SPLP { border-left-color: var(--cat-splp); }
-        li.cat-PDN { border-left-color: var(--cat-pdn); }
-        li.cat-Portal { border-left-color: var(--cat-portal); }
+        li { 
+            background: rgba(255, 255, 255, 0.02); 
+            padding: 16px; 
+            border-radius: 10px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-left: 4px solid #ccc; 
+            border-top: 1px solid rgba(255,255,255,0.02);
+            border-right: 1px solid rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            transition: all 0.3s ease;
+        }
+        li:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(4px);
+        }
+        li.cat-JIP { border-left-color: var(--cat-jip); box-shadow: inset 5px 0 10px rgba(6, 182, 212, 0.03); }
+        li.cat-SPLP { border-left-color: var(--cat-splp); box-shadow: inset 5px 0 10px rgba(59, 130, 246, 0.03); }
+        li.cat-PDN { border-left-color: var(--cat-pdn); box-shadow: inset 5px 0 10px rgba(168, 85, 247, 0.03); }
+        li.cat-Portal { border-left-color: var(--cat-portal); box-shadow: inset 5px 0 10px rgba(236, 72, 153, 0.03); }
         li.cat-Umum { border-left-color: var(--cat-umum); }
-        li.completed { border-left-color: #d1d5db !important; background-color: #f3f4f6; opacity: 0.55; }
+        
+        li.completed { border-left-color: rgba(255,255,255,0.1) !important; background-color: rgba(255,255,255,0.01); opacity: 0.4; box-shadow: none !important; }
         li.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
-        li.critical-alert { animation: borderBlink 1s infinite alternate; background-color: #fef2f2; }
-        @keyframes borderBlink { from { border-right: 0px solid transparent; } to { border-right: 5px solid var(--danger); } }
+        
+        li.critical-alert { 
+            animation: borderBlink 1.5s infinite alternate; 
+            background: linear-gradient(90deg, rgba(239,68,68,0.08) 0%, rgba(0,0,0,0) 100%);
+        }
+        @keyframes borderBlink { 
+            from { border-right: 1px solid transparent; box-shadow: 0 0 5px rgba(239, 68, 68, 0.1); } 
+            to { border-right: 4px solid var(--danger); box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); } 
+        }
 
         .task-details { flex-grow: 1; margin-right: 15px; }
-        .task-title { font-weight: 600; display: block; font-size: 15px; }
-        .task-meta { font-size: 12px; color: var(--text-muted); margin-top: 5px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .badge { padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; }
-        .bg-priority-Tinggi { background-color: var(--danger); }
-        .bg-priority-Sedang { background-color: var(--warning); }
-        .bg-priority-Rendah { background-color: var(--success); }
-        .badge-cat { color: white; font-weight: 500; }
-        .bg-cat-JIP { background-color: var(--cat-jip); }
-        .bg-cat-SPLP { background-color: var(--cat-splp); }
-        .bg-cat-PDN { background-color: var(--cat-pdn); }
-        .bg-cat-Portal { background-color: var(--cat-portal); }
-        .delete-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 16px; padding: 5px; width: auto; }
-        .delete-btn:hover { color: var(--danger); }
-        .action-area { display: flex; align-items: center; gap: 12px; }
+        .task-title { font-weight: 600; display: block; font-size: 15px; color: #fff; }
+        .task-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        
+        .badge { padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: bold; color: white; }
+        .bg-priority-Tinggi { background-color: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .bg-priority-Sedang { background-color: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .bg-priority-Rendah { background-color: rgba(16, 185, 129, 0.2); color: #86efac; border: 1px solid rgba(16, 185, 129, 0.4); }
+        
+        .badge-cat { font-weight: 600; }
+        .bg-cat-JIP { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+        .bg-cat-SPLP { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .bg-cat-PDN { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .bg-cat-Portal { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+        
+        .delete-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 16px; padding: 5px; width: auto; box-shadow: none; }
+        .delete-btn:hover { color: var(--danger); transform: none; }
+        .action-area { display: flex; align-items: center; gap: 14px; }
+        
+        .checkbox-cyber {
+            accent-color: var(--primary);
+            transform: scale(1.3);
+            cursor: pointer;
+        }
 
-        /* ==================== FITUR CHATBOT AI WINDOW ==================== */
+        /* Stats List */
+        .stat-item { margin: 8px 0; font-size: 13px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; }
+
+        /* ==================== CHATBOT WIDGET FUTURISTIK ==================== */
         .chat-widget-btn {
             position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px;
-            background-color: #7c3aed; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-size: 28px; color: white; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(124,58,237,0.4); z-index: 1000; transition: transform 0.2s;
+            background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%); border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 26px; color: white; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5); z-index: 1000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .chat-widget-btn:hover { transform: scale(1.1); }
+        .chat-widget-btn:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 4px 25px rgba(124, 58, 237, 0.7); }
         
         .chat-window {
-            position: fixed; bottom: 95px; right: 25px; width: 360px; height: 460px;
-            background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15);
-            display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid #e5e7eb;
+            position: fixed; bottom: 100px; right: 25px; width: 380px; height: 500px;
+            background: rgba(15, 23, 42, 0.9); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: none; flex-direction: column; z-index: 1000; overflow: hidden; 
+            border: 1px solid rgba(99, 102, 241, 0.3); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
-        .chat-header { background: #7c3aed; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        .chat-close { cursor: pointer; font-size: 20px; }
-        .chat-messages { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f8fafc; }
-        .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; }
-        .msg.bot { background-color: #e0e7ff; color: #1e1b4b; align-self: flex-start; border-radius-left-bottom: 0; }
-        .msg.user { background-color: #7c3aed; color: white; align-self: flex-end; border-radius-right-bottom: 0; }
-        .chat-footer { padding: 10px; display: flex; gap: 8px; background: white; border-top: 1px solid #e5e7eb; }
-        .chat-footer input { flex-grow: 1; padding: 8px 12px; font-size: 14px; }
-        .chat-footer button { padding: 8px 15px; background: #7c3aed; font-size: 14px; }
+        .chat-header { 
+            background: linear-gradient(90deg, rgba(124,58,237,0.2) 0%, rgba(99,102,241,0.2) 100%); 
+            color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05);
+            letter-spacing: 0.5px;
+        }
+        .chat-close { cursor: pointer; font-size: 18px; color: var(--text-muted); transition: color 0.2s; }
+        .chat-close:hover { color: #fff; }
+        
+        .chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: rgba(0,0,0,0.2); }
+        
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
+        .msg.bot { 
+            background-color: rgba(255, 255, 255, 0.05); 
+            color: #e2e8f0; 
+            align-self: flex-start; 
+            border-bottom-left-radius: 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .msg.user { 
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%); 
+            color: #ffffff; 
+            align-self: flex-end; 
+            border-bottom-right-radius: 0;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.1);
+        }
+        
+        .chat-footer { padding: 12px; display: flex; gap: 10px; background: rgba(15, 23, 42, 0.6); border-top: 1px solid rgba(255,255,255,0.05); }
+        .chat-footer input { flex-grow: 1; padding: 10px 14px; font-size: 14px; background: rgba(0,0,0,0.4); }
+        .chat-footer button { padding: 10px 18px; background: var(--primary); font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="dashboard">
-    <h1 id="dashboardTitle">💼 Dashboard Ruang Kerja SPBE</h1>
+    <h1 id="dashboardTitle">⚡ SPBE CORE MATRIX</h1>
     <div class="subtitle">Sistem Manajemen Terbuka Berdasarkan Bidang Kerja Utama</div>
     
-    <div id="alertBanner" class="alert-banner">⚠️ PEMBERITAHUAN: Ada pekerjaan kritis di halaman ini yang mendekati batas waktu!</div>
+    <div id="alertBanner" class="alert-banner">⚠️ SYSTEM ALERT: Pekerjaan kritis terdeteksi mendekati batas waktu!</div>
 
     <!-- Navigasi Halaman Utama -->
     <div class="page-navigation">
@@ -150,19 +347,19 @@
         <div class="left-column">
             <!-- Kotak AI Input -->
             <div class="main-card ai-box">
-                <h3 class="card-title">✨ Asisten AI Entri Instan</h3>
+                <h3 class="card-title">✨ INSTANT AI INGESTION ENGINE</h3>
                 <div class="ai-input-group">
-                    <textarea id="aiPrompt" rows="2" placeholder="Ketik tugas bebas... (Contoh: 'Rapat koordinasi PDN besok jam 2 siang')"></textarea>
-                    <button class="btn-ai" id="btnAiProcess" onclick="processWithAILangsung()" style="min-width: 120px;">🤖 Kirim AI</button>
+                    <textarea id="aiPrompt" rows="2" placeholder="Masukkan instruksi bebas... (Contoh: 'Rapat koordinasi PDN besok jam 2 siang')"></textarea>
+                    <button class="btn-ai" id="btnAiProcess" onclick="processWithAILangsung()" style="min-width: 120px;">🤖 ENGINE RUN</button>
                 </div>
             </div>
 
             <!-- Daftar Pekerjaan Detail -->
             <div class="main-card">
-                <div class="card-title">📝 Daftar Rincian Pekerjaan (<span id="pageNameLabel">Semua</span>)</div>
+                <div class="card-title">📝 TASK REGISTRY METRICS (<span id="pageNameLabel">Semua</span>)</div>
                 <div class="filter-tabs">
                     <button class="filter-btn active" id="filter-all" onclick="setStatusFilter('all')">Semua Status</button>
-                    <button class="filter-btn" id="filter-pending" onclick="setStatusFilter('pending')">⏳ Belum Selesai</button>
+                    <button class="filter-btn" id="filter-pending" onclick="setStatusFilter('pending')">⏳ Tertunda</button>
                     <button class="filter-btn" id="filter-completed" onclick="setStatusFilter('completed')">✅ Selesai</button>
                 </div>
                 <ul id="taskList"></ul>
@@ -172,33 +369,33 @@
         <!-- Kolom Kanan: Grafik Progres -->
         <div class="right-column">
             <div class="main-card progress-box">
-                <h3 class="card-title" style="font-size: 14px; margin-bottom: 20px;">📊 Progres Halaman Ini</h3>
+                <h3 class="card-title" style="font-size: 13px; margin-bottom: 25px;">📊 COMPLETION RATIO</h3>
                 <div class="progress-circle">
-                    <svg><circle class="bg-ring" cx="60" cy="60" r="55"></circle><circle class="progress-ring" id="visualRing" cx="60" cy="60" r="55"></circle></svg>
+                    <svg><circle class="bg-ring" cx="65" cy="65" r="55"></circle><circle class="progress-ring" id="visualRing" cx="65" cy="65" r="55"></circle></svg>
                     <div class="progress-percentage" id="visualPercent">0%</div>
                 </div>
-                <div style="margin-top: 20px; font-size: 13px; text-align: left; width: 100%; border-top: 1px solid #f3f4f6; padding-top: 15px;">
-                    <p style="margin: 5px 0;">Total Kerja: <b id="statTotal" style="float:right;">0</b></p>
-                    <p style="margin: 5px 0; color: var(--warning);">Tertunda: <b id="statPending" style="float:right;">0</b></p>
-                    <p style="margin: 5px 0; color: var(--success);">Selesai: <b id="statCompleted" style="float:right;">0</b></p>
+                <div style="margin-top: 25px; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                    <div class="stat-item"><span>Total Tugas:</span> <b id="statTotal">0</b></div>
+                    <div class="stat-item" style="color: var(--warning);"><span>Tertunda:</span> <b id="statPending">0</b></div>
+                    <div class="stat-item" style="color: var(--success);"><span>Selesai:</span> <b id="statCompleted">0</b></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ==================== STRUKTUR INTERFAS CHATBOT AI ==================== -->
+<!-- ==================== INTERFAS CHATBOT AI WIDGET ==================== -->
 <div class="chat-widget-btn" onclick="toggleChatWindow()">💬</div>
 <div class="chat-window" id="chatWindow">
     <div class="chat-header">
-        <span>🤖 Asisten AI Jadwal</span>
+        <span>🤖 AI SCHEDULE ASSISTANT</span>
         <span class="chat-close" onclick="toggleChatWindow()">✖</span>
     </div>
     <div class="chat-messages" id="chatMessages">
-        <div class="msg bot">Halo! Saya asisten jadwal Anda. Silakan tanyakan perihal agenda atau status pekerjaan Anda di dashboard ini. 😊</div>
+        <div class="msg bot">Koneksi aman terjalin. Saya siap menganalisis agenda dan status pekerjaan di sistem matriks Anda. Ada yang bisa dibantu? 🌐</div>
     </div>
     <div class="chat-footer">
-        <input type="text" id="chatInput" placeholder="Ada jadwal apa hari ini?..." onkeypress="handleChatKeyPress(event)">
+        <input type="text" id="chatInput" placeholder="Tanyakan jadwal atau tugas Anda..." onkeypress="handleChatKeyPress(event)">
         <button onclick="sendChatMessage()">Kirim</button>
     </div>
 </div>
@@ -219,7 +416,6 @@
 
     function handleChatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
 
-    // ==================== LOGIKA PENJAWAB OBROLAN AI JADWAL ====================
     function sendChatMessage() {
         const inputEl = document.getElementById("chatInput");
         const query = inputEl.value.trim();
@@ -246,10 +442,10 @@
 
                 if (listTarget.length === 0) {
                     jawaban = filterKategori 
-                        ? `Aman! Tidak ada jadwal atau pekerjaan tertunda untuk bidang **Pengelolaan ${filterKategori}** saat ini.`
-                        : "Bagus! Berdasarkan data dashboard, semua pekerjaan Anda sudah selesai atau belum ada jadwal terdaftar.";
+                        ? `Aman! Tidak ada antrean tugas tertunda pada klaster **Pengelolaan ${filterKategori}**.`
+                        : "Sistem bersih. Seluruh tugas dalam pangkalan data telah diselesaikan atau belum ada jadwal terdaftar.";
                 } else {
-                    jawaban = `Saat ini ada **${listTarget.length} pekerjaan** yang belum selesai:<br><br>`;
+                    jawaban = `Terdeteksi **${listTarget.length} tugas aktif** dalam antrean:<br><br>`;
                     listTarget.forEach((t, index) => {
                         jawaban += `${index + 1}. [${t.category}] <b>${t.name}</b> (Target: ${t.time})<br>`;
                     });
@@ -258,17 +454,17 @@
             else if (q.includes("besok")) {
                 const besokTasks = totalBelumSelesai.filter(t => t.name.toLowerCase().includes("besok"));
                 if (besokTasks.length === 0) {
-                    jawaban = "Sepertinya untuk besok belum ada jadwal khusus yang terdaftar di sistem.";
+                    jawaban = "Tidak ada manifes log jadwal khusus yang tercatat untuk hari esok.";
                 } else {
-                    jawaban = `Untuk besok, ada **${besokTasks.length} agenda**:<br>`;
+                    jawaban = `Manifes jadwal esok hari mencatat **${besokTasks.length} agenda**:<br>`;
                     besokTasks.forEach((t, i) => { jawaban += `- ${t.name} (${t.time})<br>`; });
                 }
             }
             else if (q.includes("halo") || q.includes("hai") || q.includes("pagi") || q.includes("siang")) {
-                jawaban = "Halo! Ada yang bisa saya bantu perihal pengecekan jadwal kerja Anda hari ini?";
+                jawaban = "Sistem aktif. Silakan masukkan perintah pencarian jadwal atau tugas Anda.";
             } 
             else {
-                jawaban = "Maaf, saya kurang memahami pertanyaan itu. Anda bisa bertanya seperti: <i>'Ada jadwal apa saja?'</i>, <i>'Apakah ada tugas PDN?'</i>, atau <i>'Ada tugas besok?'</i>.";
+                jawaban = "Maaf, pola perintah tidak dikenali. Coba gunakan kata kunci seperti: <i>'Ada jadwal apa saja?'</i>, <i>'Tugas PDN'</i>, atau <i>'Agenda besok'</i>.";
             }
 
             appendMessage(jawaban, 'bot');
@@ -290,8 +486,12 @@
         document.getElementById(`tab-${pageCode}`).classList.add('active');
         const labels = { 'all': 'Semua Bidang', 'JIP': 'Pengelolaan JIP', 'SPLP': 'Pengelolaan SPLP', 'PDN': 'Pengelolaan PDN', 'Portal': 'Portal Pelayanan' };
         document.getElementById("pageNameLabel").innerText = labels[pageCode];
-        const colors = { 'all': '#4f46e5', 'JIP': '#06b6d4', 'SPLP': '#3b82f6', 'PDN': '#8b5cf6', 'Portal': '#ec4899' };
-        document.getElementById("visualRing").style.stroke = colors[pageCode];
+        
+        const colors = { 'all': '#6366f1', 'JIP': '#06b6d4', 'SPLP': '#3b82f6', 'PDN': '#a855f7', 'Portal': '#ec4899' };
+        const ring = document.getElementById("visualRing");
+        ring.style.stroke = colors[pageCode];
+        ring.style.filter = `drop-shadow(0 0 6px ${colors[pageCode]})`;
+        
         updateDashboard();
     }
 
@@ -300,7 +500,7 @@
         const fullText = promptInput.value.trim();
         if (fullText === "") return;
 
-        document.getElementById("btnAiProcess").innerText = "Memproses...";
+        document.getElementById("btnAiProcess").innerText = "PROCESSING...";
         const kalimats = fullText.split(/(?:\s+lalu\s+|\s+kemudian\s+|\.\s+)/i);
         const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
 
@@ -346,7 +546,7 @@
 
         localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
         promptInput.value = "";
-        document.getElementById("btnAiProcess").innerText = "🤖 Kirim AI";
+        document.getElementById("btnAiProcess").innerText = "🤖 ENGINE RUN";
         updateDashboard();
     }
 
@@ -358,7 +558,7 @@
     }
 
     function deleteTask(id) {
-        if(confirm("Hapus pekerjaan ini?")) {
+        if(confirm("Hapus data tugas ini dari repositori?")) {
             let tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
             tasks = tasks.filter(t => t.id !== id);
             localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
@@ -400,7 +600,7 @@
             li.setAttribute("id", `task-${task.id}`);
             li.className = `cat-${task.category} ${task.completed ? 'completed' : ''}`;
             
-            let labelKategori = task.category === 'Umum' ? 'Umum' : `Pengelolaan ${task.category}`;
+            let labelKategori = task.category === 'Umum' ? 'Umum' : `Klaster ${task.category}`;
 
             li.innerHTML = `
                 <div class="task-details">
@@ -412,7 +612,7 @@
                     </div>
                 </div>
                 <div class="action-area">
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})" style="transform: scale(1.3); cursor:pointer;">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})" class="checkbox-cyber">
                     <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
                 </div>
             `;
