@@ -3,127 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asisten Jadwal Harian Saya</title>
+    <title>Dashboard Pekerjaan Saya</title>
     <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 500px;
+        .dashboard {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        h2 {
-            color: #333;
+        h1 {
             text-align: center;
-            margin-bottom: 20px;
+            color: var(--primary);
+            margin-bottom: 25px;
         }
-        .form-group {
+        /* Grid Statistik */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .stat-card h3 {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .stat-card p {
+            margin: 5px 0 0 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Form & Konten */
+        .main-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
             margin-bottom: 15px;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
         }
-        input[type="text"], input[type="datetime-local"] {
-            width: 100%;
+        input, select, button {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
+            font-size: 14px;
             box-sizing: border-box;
         }
         button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
+            background-color: var(--primary);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
             cursor: pointer;
             font-weight: bold;
+            transition: background 0.2s;
         }
-        button:hover {
-            background-color: #0056b3;
+        button:hover { background-color: #4338ca; }
+        /* Filter Tab */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 25px;
+        .filter-btn {
+            background: #e5e7eb;
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
         }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        /* Daftar Tugas */
+        ul { list-style: none; padding: 0; margin: 0; }
         li {
-            background-color: #f8f9fa;
+            background: #f9fafb;
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 8px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 5px solid #007bff;
+            border-left: 5px solid #ccc;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
+        li.priority-Tinggi { border-left-color: var(--danger); }
+        li.priority-Sedang { border-left-color: var(--warning); }
+        li.priority-Rendah { border-left-color: var(--success); }
         li.completed {
-            border-left-color: #28a745;
-            background-color: #e2e3e5;
-            text-decoration: line-through;
-            color: #6c757d;
+            border-left-color: #d1d5db;
+            background-color: #f3f4f6;
+            opacity: 0.6;
         }
-        .task-info {
-            flex-grow: 1;
-            margin-right: 10px;
+        li.completed .task-title { text-decoration: line-through; }
+        .task-details { flex-grow: 1; margin-right: 15px; }
+        .task-title { font-weight: 600; display: block; }
+        .task-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            margin-left: 5px;
         }
-        .task-time {
-            font-size: 12px;
-            color: #777;
-            display: block;
-            margin-top: 4px;
-        }
-        .action-btns input {
+        .bg-Tinggi { background-color: var(--danger); }
+        .bg-Sedang { background-color: var(--warning); }
+        .bg-Rendah { background-color: var(--success); }
+        .delete-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
             cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
         }
+        .delete-btn:hover { color: var(--danger); }
+        .action-area { display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Asisten Jadwal & Tugas</h2>
+<div class="dashboard">
+    <h1>💼 Dashboard Pekerjaan Saya</h1>
     
-    <!-- Form Tambah Tugas -->
-    <div class="form-group">
-        <label for="taskName">Nama Pekerjaan/Tugas:</label>
-        <input type="text" id="taskName" placeholder="Contoh: Rapat dengan tim marketing">
+    <!-- Row Statistik -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Tugas</h3>
+            <p id="totalTasks" style="color: var(--primary);">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Tertunda</h3>
+            <p id="pendingTasks" style="color: var(--warning);">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Selesai</h3>
+            <p id="completedTasks" style="color: var(--success);">0</p>
+        </div>
     </div>
-    
-    <div class="form-group">
-        <label for="taskTime">Waktu & Tanggal Jalankan:</label>
-        <input type="datetime-local" id="taskTime">
-    </div>
-    
-    <button onclick="addTask()">Simpan Jadwal</button>
 
-    <!-- Daftar Tugas -->
-    <ul id="taskList"></ul>
+    <!-- Area Input -->
+    <div class="main-card">
+        <div class="form-row">
+            <input type="text" id="taskName" placeholder="Nama Pekerjaan / Project Baru...">
+            <input type="datetime-local" id="taskTime">
+            <select id="taskPriority">
+                <option value="Rendah">Prioritas: Rendah</option>
+                <option value="Sedang">Prioritas: Sedang</option>
+                <option value="Tinggi">Prioritas: Tinggi</option>
+            </select>
+        </div>
+        <button style="width: 100%; py: 12px;" onclick="addTask()">➕ Tambahkan ke Dashboard</button>
+    </div>
+
+    <!-- Area Daftar & Filter -->
+    <div class="main-card">
+        <div class="filter-tabs">
+            <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Semua</button>
+            <button class="filter-btn" id="filter-pending" onclick="setFilter('pending')">⏳ Tertunda</button>
+            <button class="filter-btn" id="filter-completed" onclick="setFilter('completed')">✅ Selesai</button>
+        </div>
+        
+        <ul id="taskList"></ul>
+    </div>
 </div>
 
 <script>
-    // Fungsi untuk memuat tugas dari penyimpanan browser saat web dibuka
-    document.addEventListener("DOMContentLoaded", loadTasks);
+    let currentFilter = 'all';
+
+    document.addEventListener("DOMContentLoaded", () => {
+        updateDashboard();
+    });
 
     function addTask() {
         const nameInput = document.getElementById("taskName");
         const timeInput = document.getElementById("taskTime");
+        const priorityInput = document.getElementById("taskPriority");
 
         if (nameInput.value.trim() === "" || timeInput.value === "") {
-            alert("Mohon isi nama pekerjaan dan waktunya!");
+            alert("Mohon isi nama pekerjaan dan target waktunya!");
             return;
         }
 
@@ -131,66 +222,84 @@
             id: Date.now(),
             name: nameInput.value,
             time: formatTime(timeInput.value),
+            priority: priorityInput.value,
             completed: false
         };
 
-        saveTaskToStorage(task);
-        renderTask(task);
+        const tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
+        tasks.push(task);
+        localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
 
-        // Kosongkan form setelah disimpan
         nameInput.value = "";
         timeInput.value = "";
+        priorityInput.value = "Rendah";
+
+        updateDashboard();
     }
 
     function formatTime(dateTimeStr) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         return new Date(dateTimeStr).toLocaleDateString('id-ID', options);
     }
 
-    function renderTask(task) {
-        const ul = document.getElementById("taskList");
-        const li = document.createElement("li");
-        li.setAttribute("id", task.id);
-        if (task.completed) li.classList.add("completed");
-
-        li.innerHTML = `
-            <div class="task-info">
-                <strong>${task.name}</strong>
-                <span class="task-time">⏰ ${task.time}</span>
-            </div>
-            <div class="action-btns">
-                <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})">
-            </div>
-        `;
-        ul.appendChild(li);
-    }
-
     function toggleTask(id) {
-        let tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
+        let tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
         tasks = tasks.map(task => {
-            if (task.id === id) {
-                task.completed = !task.completed;
-                const element = document.getElementById(id);
-                if (task.completed) {
-                    element.classList.add("completed");
-                } else {
-                    element.classList.remove("completed");
-                }
-            }
+            if (task.id === id) task.completed = !task.completed;
             return task;
         });
-        localStorage.setItem("myTasks", JSON.stringify(tasks));
+        localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
+        updateDashboard();
     }
 
-    function saveTaskToStorage(task) {
-        const tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
-        tasks.push(task);
-        localStorage.setItem("myTasks", JSON.stringify(tasks));
+    function deleteTask(id) {
+        let tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
+        tasks = tasks.filter(task => task.id !== id);
+        localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
+        updateDashboard();
     }
 
-    function loadTasks() {
-        const tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
-        tasks.forEach(task => renderTask(task));
+    function setFilter(filter) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`filter-${filter}`).classList.add('active');
+        updateDashboard();
+    }
+
+    function updateDashboard() {
+        const tasks = JSON.parse(localStorage.getItem("dashboardTasks")) || [];
+        const ul = document.getElementById("taskList");
+        ul.innerHTML = "";
+
+        // Hitung Statistik
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.completed).length;
+        const pending = total - completed;
+
+        document.getElementById("totalTasks").innerText = total;
+        document.getElementById("pendingTasks").innerText = pending;
+        document.getElementById("completedTasks").innerText = completed;
+
+        // Filter & Tampilkan Tugas
+        tasks.forEach(task => {
+            if (currentFilter === 'pending' && task.completed) return;
+            if (currentFilter === 'completed' && !task.completed) return;
+
+            const li = document.createElement("li");
+            li.className = `priority-${task.priority} ${task.completed ? 'completed' : ''}`;
+            
+            li.innerHTML = `
+                <div class="task-details">
+                    <span class="task-title">${task.name}</span>
+                    <span class="task-meta">⏱️ ${task.time} <span class="badge bg-${task.priority}">${task.priority}</span></span>
+                </div>
+                <div class="action-area">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})" style="transform: scale(1.2); cursor:pointer;">
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
+                </div>
+            `;
+            ul.appendChild(li);
+        });
     }
 </script>
 
