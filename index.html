@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard SPBE Premium - Instan AI</title>
+    <title>Dashboard Kerja SPBE - Multi Tab & Grafik</title>
     <style>
         :root {
             --bg-color: #f4f6f9;
@@ -29,13 +29,12 @@
             padding: 20px;
         }
         .dashboard {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
         .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 14px; }
         
-        /* Banner Notifikasi */
         .alert-banner {
             background-color: var(--danger);
             color: white;
@@ -47,107 +46,110 @@
             font-weight: bold;
             animation: pulse 1.5s infinite;
         }
-        @keyframes pulse {
-            0% { opacity: 0.8; }
-            50% { opacity: 1; }
-            100% { opacity: 0.8; }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+
+        /* navigasi Halaman Utama (Tabs) */
+        .page-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .nav-tab {
+            background: #e5e7eb;
+            color: var(--text);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .nav-tab.active { background-color: var(--primary); color: white; box-shadow: 0 4px 6px rgba(79,70,229,0.2); }
+        .nav-tab#tab-JIP.active { background-color: var(--cat-jip); }
+        .nav-tab#tab-SPLP.active { background-color: var(--cat-splp); }
+        .nav-tab#tab-PDN.active { background-color: var(--cat-pdn); }
+        .nav-tab#tab-Portal.active { background-color: var(--cat-portal); }
+
+        /* Layout Grid Konten Halaman */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 850px) {
+            .page-layout { grid-template-columns: 1fr; }
         }
 
-        /* Grid Statistik */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .stat-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .stat-card h3 { margin: 0; font-size: 14px; color: var(--text-muted); }
-        .stat-card p { margin: 5px 0 0 0; font-size: 24px; font-weight: bold; }
-        
         /* Kotak Fitur */
         .main-card {
             background: var(--card-bg);
-            padding: 25px;
+            padding: 22px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
         }
-        .card-title {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 16px;
-            color: var(--primary);
+        .card-title { margin-top: 0; margin-bottom: 12px; font-size: 16px; color: var(--text); display: flex; align-items: center; gap: 8px; font-weight: bold; }
+
+        /* Grafik Progres Visual */
+        .progress-box {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .progress-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        .progress-circle svg {
+            width: 120px;
+            height: 120px;
+            transform: rotate(-90deg);
+        }
+        .progress-circle circle {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+        }
+        .progress-circle .bg-ring { stroke: #e5e7eb; }
+        .progress-circle .progress-ring {
+            stroke: var(--primary);
+            stroke-dasharray: 345;
+            stroke-dashoffset: 345;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        .progress-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 22px;
+            font-weight: bold;
         }
 
         /* AI Section */
-        .ai-box {
-            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
-            border: 1px solid #c7d2fe;
-        }
-        .ai-input-group {
-            display: flex;
-            gap: 10px;
-        }
+        .ai-box { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); border: 1px solid #c7d2fe; }
+        .ai-input-group { display: flex; gap: 10px; }
         
-        /* Form Manual */
-        .form-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .form-row-subs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        @media (max-width: 600px) {
-            .form-row, .form-row-subs, .stats-grid, .ai-input-group { grid-template-columns: 1fr; flex-direction: column; }
-        }
-        
-        input, select, button, textarea {
-            padding: 11px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
-            width: 100%;
-        }
+        input, select, button, textarea { padding: 11px; border: 1px solid #dee2e6; border-radius: 6px; font-size: 14px; box-sizing: border-box; width: 100%; }
         textarea { resize: vertical; font-family: inherit; }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
         
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-            width: auto;
-        }
-        button:hover { background-color: #4338ca; }
-        button.btn-block { width: 100%; }
+        button { background-color: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; width: auto; }
         button.btn-ai { background-color: #7c3aed; }
         button.btn-ai:hover { background-color: #6d28d9; }
 
-        /* Filter Tab */
-        .filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filter-btn { background: #e5e7eb; color: var(--text); padding: 6px 14px; border-radius: 20px; font-size: 13px; border: none; cursor: pointer; }
-        .filter-btn.active { background: var(--primary); color: white; }
+        /* Status Filter Sub-tab */
+        .filter-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .filter-btn { background: #e5e7eb; color: var(--text); padding: 5px 12px; border-radius: 20px; font-size: 12px; border: none; cursor: pointer; }
+        .filter-btn.active { background: #374151; color: white; }
         
         /* Daftar Tugas */
         ul { list-style: none; padding: 0; margin: 0; }
@@ -155,12 +157,12 @@
             background: #f9fafb;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-left: 6px solid #ccc;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.01);
         }
         li.cat-JIP { border-left-color: var(--cat-jip); }
         li.cat-SPLP { border-left-color: var(--cat-splp); }
@@ -172,10 +174,7 @@
         li.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
         li.critical-alert { animation: borderBlink 1s infinite alternate; background-color: #fef2f2; }
         
-        @keyframes borderBlink {
-            from { border-right: 0px solid transparent; }
-            to { border-right: 5px solid var(--danger); }
-        }
+        @keyframes borderBlink { from { border-right: 0px solid transparent; } to { border-right: 5px solid var(--danger); } }
 
         .task-details { flex-grow: 1; margin-right: 15px; }
         .task-title { font-weight: 600; display: block; font-size: 15px; }
@@ -191,7 +190,6 @@
         .bg-cat-SPLP { background-color: var(--cat-splp); }
         .bg-cat-PDN { background-color: var(--cat-pdn); }
         .bg-cat-Portal { background-color: var(--cat-portal); }
-        .bg-cat-Umum { background-color: var(--cat-umum); }
 
         .delete-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 16px; padding: 5px; width: auto; }
         .delete-btn:hover { color: var(--danger); }
@@ -201,274 +199,223 @@
 <body>
 
 <div class="dashboard">
-    <h1>💼 Dashboard Ruang Kerja SPBE</h1>
-    <div class="subtitle">Sistem Monitor Mandiri Otomatis Berbasis AI</div>
+    <h1 id="dashboardTitle">💼 Dashboard Ruang Kerja SPBE</h1>
+    <div class="subtitle">Sistem Manajemen Terbuka Berdasarkan Bidang Kerja Utama</div>
     
-    <!-- Banner Pemberitahuan Darurat -->
-    <div id="alertBanner" class="alert-banner">⚠️ PEMBERITAHUAN: Ada pekerjaan mendesak yang mendekati/melewati batas waktu!</div>
+    <div id="alertBanner" class="alert-banner">⚠️ PEMBERITAHUAN: Ada pekerjaan kritis di halaman ini yang mendekati batas waktu!</div>
 
-    <!-- Row Statistik -->
-    <div class="stats-grid">
-        <div class="stat-card"><h3>Total Pekerjaan</h3><p id="totalTasks" style="color: var(--primary);">0</p></div>
-        <div class="stat-card"><h3>Belum Selesai</h3><p id="pendingTasks" style="color: var(--warning);">0</p></div>
-        <div class="stat-card"><h3>Sudah Selesai</h3><p id="completedTasks" style="color: var(--success);">0</p></div>
+    <!-- 1. NAVIGASI HALAMAN UTAMA (TABS) -->
+    <div class="page-navigation">
+        <button class="nav-tab active" id="tab-all" onclick="switchPage('all')">📂 Semua Bidang</button>
+        <button class="nav-tab" id="tab-JIP" onclick="switchPage('JIP')">💼 Pengelolaan JIP</button>
+        <button class="nav-tab" id="tab-SPLP" onclick="switchPage('SPLP')">🔗 Pengelolaan SPLP</button>
+        <button class="nav-tab" id="tab-PDN" onclick="switchPage('PDN')">🖥️ Pengelolaan PDN</button>
+        <button class="nav-tab" id="tab-Portal" onclick="switchPage('Portal')">🌐 Portal Pelayanan</button>
     </div>
 
-    <!-- Kotak AI Input Langsung -->
-    <div class="main-card ai-box">
-        <h3 class="card-title">✨ Asisten AI Langsung Buat Daftar Kerja</h3>
-        <p style="font-size: 13px; margin-top: 0; color: #4b5563;">
-            Tulis perintah pekerjaan Anda di sini. AI akan langsung memasukkannya ke dashboard.<br>
-            <i>Bisa multi-tugas, contoh: "Cek konfigurasi SPLP besok jam 9 pagi lalu maintenance server PDN jam 1 siang nanti penting"</i>
-        </p>
-        <div class="ai-input-group">
-            <textarea id="aiPrompt" rows="2" placeholder="Tulis instruksi atau agenda di sini..."></textarea>
-            <button class="btn-ai" id="btnAiProcess" onclick="processWithAILangsung()" style="min-width: 140px;">🤖 Kirim ke AI</button>
-        </div>
-    </div>
+    <!-- 2. LAYOUT HALAMAN HALAMAN UTAMA -->
+    <div class="page-layout">
+        
+        <!-- KOLOM KIRI: Manajemen Tugas -->
+        <div class="left-column">
+            <!-- Kotak AI Input -->
+            <div class="main-card ai-box">
+                <h3 class="card-title">✨ Asisten AI Entri Instan</h3>
+                <div class="ai-input-group">
+                    <textarea id="aiPrompt" rows="2" placeholder="Ketik tugas bebas... (Contoh: 'Rapat teknis SPLP besok jam 11 siang penting')"></textarea>
+                    <button class="btn-ai" id="btnAiProcess" onclick="processWithAILangsung()" style="min-width: 120px;">🤖 Kirim AI</button>
+                </div>
+            </div>
 
-    <!-- Area Input Manual (Opsional) -->
-    <div class="main-card">
-        <h3 class="card-title">📝 Tambah Pekerjaan Manual</h3>
-        <div class="form-row">
-            <input type="text" id="taskName" placeholder="Nama Pekerjaan / Progres Kerja...">
-            <select id="taskCategory">
-                <option value="JIP">💼 Pengelolaan JIP</option>
-                <option value="SPLP">🔗 Pengelolaan SPLP</option>
-                <option value="PDN">🖥️ Pengelolaan PDN</option>
-                <option value="Portal">🌐 Pengelolaan Portal Pelayanan</option>
-                <option value="Umum">📌 Tugas Umum/Lainnya</option>
-            </select>
+            <!-- Daftar Pekerjaan Detail -->
+            <div class="main-card">
+                <div class="card-title">📝 Daftar Rincian Pekerjaan (<span id="pageNameLabel">Semua</span>)</div>
+                <div class="filter-tabs">
+                    <button class="filter-btn active" id="filter-all" onclick="setStatusFilter('all')">Semua Status</button>
+                    <button class="filter-btn" id="filter-pending" onclick="setStatusFilter('pending')">⏳ Belum Selesai</button>
+                    <button class="filter-btn" id="filter-completed" onclick="setStatusFilter('completed')">✅ Selesai</button>
+                </div>
+                <ul id="taskList"></ul>
+            </div>
         </div>
-        <div class="form-row-subs">
-            <input type="datetime-local" id="taskTime">
-            <select id="taskPriority">
-                <option value="Rendah">Prioritas: Normal / Rendah</option>
-                <option value="Sedang">Prioritas: Sedang (Urgent)</option>
-                <option value="Tinggi">Prioritas: Tinggi (Critical)</option>
-            </select>
-        </div>
-        <button class="btn-block" onclick="addTaskManual()">➕ Tambah ke Track Dashboard</button>
-    </div>
 
-    <!-- Area Daftar & Filter -->
-    <div class="main-card">
-        <div class="filter-tabs">
-            <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Semua Agenda</button>
-            <button class="filter-btn" id="filter-pending" onclick="setFilter('pending')">⏳ Belum Selesai</button>
-            <button class="filter-btn" id="filter-completed" onclick="setFilter('completed')">✅ Selesai</button>
+        <!-- KOLOM KANAN: Statistik & Grafik Progres Halaman Terkait -->
+        <div class="right-column">
+            <div class="main-card progress-box">
+                <h3 class="card-title" style="font-size: 14px; margin-bottom: 20px;">📊 Progres Halaman Ini</h3>
+                
+                <!-- Grafik Progres Lingkaran SVG -->
+                <div class="progress-circle">
+                    <svg>
+                        <circle class="bg-ring" cx="60" cy="60" r="55"></circle>
+                        <circle class="progress-ring" id="visualRing" cx="60" cy="60" r="55"></circle>
+                    </svg>
+                    <div class="progress-percentage" id="visualPercent">0%</div>
+                </div>
+
+                <div style="margin-top: 20px; font-size: 13px; text-align: left; width: 100%; border-top: 1px solid #f3f4f6; padding-top: 15px;">
+                    <p style="margin: 5px 0;">Total Kerja: <b id="statTotal" style="float:right;">0</b></p>
+                    <p style="margin: 5px 0; color: var(--warning);">Tertunda: <b id="statPending" style="float:right;">0</b></p>
+                    <p style="margin: 5px 0; color: var(--success);">Selesai: <b id="statCompleted" style="float:right;">0</b></p>
+                </div>
+            </div>
         </div>
-        <ul id="taskList"></ul>
+
     </div>
 </div>
 
 <script>
-    let currentFilter = 'all';
+    let currentPage = 'all';  // Halaman Tab Aktif: 'all', 'JIP', 'SPLP', 'PDN', 'Portal'
+    let currentStatusFilter = 'all'; // Filter Status: 'all', 'pending', 'completed'
 
     document.addEventListener("DOMContentLoaded", () => {
         updateDashboard();
-        setInterval(checkDeadlines, 20000); // Periksa waktu tenggat setiap 20 detik
+        setInterval(checkDeadlines, 20000);
     });
 
-    // PARSING DAN MASUKKAN KODE AI LANGSUNG KE STORAGE
+    // SISTEM NAVIGASI ANTAR HALAMAN PEKERJAAN UTAMA
+    function switchPage(pageCode) {
+        currentPage = pageCode;
+        
+        // Atur Kelas Tombol Tab Aktif
+        document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab-${pageCode}`).classList.add('active');
+        
+        // Ubah Label Text Halaman
+        const labels = { 'all': 'Semua Bidang', 'JIP': 'Pengelolaan JIP', 'SPLP': 'Pengelolaan SPLP', 'PDN': 'Pengelolaan PDN', 'Portal': 'Portal Pelayanan' };
+        document.getElementById("pageNameLabel").innerText = labels[pageCode];
+
+        // Ubah Warna Dinamis Cincin Grafik Progres Mengikuti Kategori Halaman
+        const ring = document.getElementById("visualRing");
+        const colors = { 'all': '#4f46e5', 'JIP': '#06b6d4', 'SPLP': '#3b82f6', 'PDN': '#8b5cf6', 'Portal': '#ec4899' };
+        ring.style.stroke = colors[pageCode];
+
+        updateDashboard();
+    }
+
+    // PROSES INPUT OTOMATIS ASISTEN AI
     function processWithAILangsung() {
         const promptInput = document.getElementById("aiPrompt");
         const fullText = promptInput.value.trim();
+        if (fullText === "") return;
 
-        if (fullText === "") {
-            alert("Silakan ketik instruksi pekerjaan Anda terlebih dahulu!");
-            return;
-        }
-
-        document.getElementById("btnAiProcess").innerText = "Memasukkan...";
-
-        // Split text jika user memasukkan banyak tugas sekaligus menggunakan kata penghubung " lalu " atau " kemudian " atau titik "."
+        document.getElementById("btnAiProcess").innerText = "Memproses...";
         const kalimats = fullText.split(/(?:\s+lalu\s+|\s+kemudian\s+|\.\s+)/i);
         const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
-        let countBerhasil = 0;
 
         kalimats.forEach((kalimatRaw) => {
             const kalimat = kalimatRaw.trim().toLowerCase();
             if (kalimat === "") return;
 
-            // 1. Ekstraksi Kategori
             let category = "Umum";
             if (kalimat.includes("jip")) category = "JIP";
             else if (kalimat.includes("splp")) category = "SPLP";
             else if (kalimat.includes("pdn")) category = "PDN";
             else if (kalimat.includes("portal") || kalimat.includes("pelayanan")) category = "Portal";
 
-            // 2. Ekstraksi Prioritas
             let priority = "Rendah";
-            if (kalimat.includes("tinggi") || kalimat.includes("critical") || kalimat.includes("penting")) priority = "Tinggi";
+            if (kalimat.includes("tinggi") || kalimat.includes("penting")) priority = "Tinggi";
             else if (kalimat.includes("sedang") || kalimat.includes("urgent")) priority = "Sedang";
 
-            // 3. Ekstraksi Waktu
             let targetDate = new Date();
-            if (kalimat.includes("besok")) {
-                targetDate.setDate(targetDate.getDate() + 1);
-            } else if (kalimat.includes("lusa")) {
-                targetDate.setDate(targetDate.getDate() + 2);
-            }
-
+            if (kalimat.includes("besok")) targetDate.setDate(targetDate.getDate() + 1);
+            
             let matchJam = kalimat.match(/(?:jam|pukul)\s*(\d{1,2})/);
             if (matchJam) {
                 let jam = parseInt(matchJam[1]);
                 if ((kalimat.includes("malam") || kalimat.includes("sore")) && jam < 12) jam += 12;
                 targetDate.setHours(jam, 0, 0, 0);
             } else {
-                // Default target 2 jam dari sekarang jika tidak ada keterangan waktu jam eksplisit
                 targetDate.setHours(targetDate.getHours() + 2);
             }
 
-            // Memformat String Waktu ISO lokal
             const tzoffset = (new Date()).getTimezoneOffset() * 60000;
             const localISOTime = (new Date(targetDate.getTime() - tzoffset)).toISOString().slice(0, 16);
 
-            // Bikin Object Tugas Baru
-            const newTask = {
-                id: Date.now() + Math.floor(Math.random() * 1000), // id unik acak agar tidak bertabrakan saat multi-task
+            tasks.push({
+                id: Date.now() + Math.floor(Math.random() * 1000),
                 name: kalimatRaw.trim(),
                 category: category,
                 rawTime: localISOTime,
-                time: formatTime(localISOTime),
+                time: new Date(localISOTime).toLocaleDateString('id-ID', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
                 priority: priority,
                 completed: false
-            };
-
-            tasks.push(newTask);
-            countBerhalf = countBerhasil++;
+            });
         });
 
-        // Simpan semua ke lokal penyimpanan browser
         localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
-
-        // Bersihkan Kolom AI dan Segarkan Dashboard
         promptInput.value = "";
-        document.getElementById("btnAiProcess").innerText = "🤖 Kirim ke AI";
+        document.getElementById("btnAiProcess").innerText = "🤖 Kirim AI";
         
         updateDashboard();
     }
 
-    // TAMBAH MANUAL (Biasa)
-    function addTaskManual() {
-        const nameInput = document.getElementById("taskName");
-        const categoryInput = document.getElementById("taskCategory");
-        const timeInput = document.getElementById("taskTime");
-        const priorityInput = document.getElementById("taskPriority");
-
-        if (nameInput.value.trim() === "" || timeInput.value === "") {
-            alert("Mohon isi deskripsi pekerjaan dan target batas waktunya!");
-            return;
-        }
-
-        const task = {
-            id: Date.now(),
-            name: nameInput.value,
-            category: categoryInput.value,
-            rawTime: timeInput.value,
-            time: formatTime(timeInput.value),
-            priority: priorityInput.value,
-            completed: false
-        };
-
-        const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
-        tasks.push(task);
-        localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
-
-        nameInput.value = "";
-        timeInput.value = "";
-        priorityInput.value = "Rendah";
-
-        updateDashboard();
-    }
-
-    function formatTime(dateTimeStr) {
-        const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        return new Date(dateTimeStr).toLocaleDateString('id-ID', options);
-    }
-
-    // MONITOR ALARM PENGINGAT DEADLINE
-    function checkDeadlines() {
-        const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
-        const sekarang = new Date();
-        let adaKritis = false;
-
-        tasks.forEach(task => {
-            if (!task.completed && task.rawTime) {
-                const batasWaktu = new Date(task.rawTime);
-                const selisihJam = (batasWaktu - sekarang) / (1000 * 60 * 60);
-
-                const el = document.getElementById(`task-${task.id}`);
-                if (selisihJam <= 1) {
-                    adaKritis = true;
-                    if (el) el.classList.add("critical-alert");
-                } else {
-                    if (el) el.classList.remove("critical-alert");
-                }
-            }
-        });
-
-        document.getElementById("alertBanner").style.display = adaKritis ? "block" : "none";
-    }
-
     function toggleTask(id) {
         let tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
-        tasks = tasks.map(task => {
-            if (task.id === id) task.completed = !task.completed;
-            return task;
-        });
+        tasks = tasks.map(t => { if (t.id === id) t.completed = !t.completed; return t; });
         localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
         updateDashboard();
     }
 
     function deleteTask(id) {
-        if(confirm("Hapus log pekerjaan ini?")) {
+        if(confirm("Hapus pekerjaan ini?")) {
             let tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
-            tasks = tasks.filter(task => task.id !== id);
+            tasks = tasks.filter(t => t.id !== id);
             localStorage.setItem("spbeDashboardTasks", JSON.stringify(tasks));
             updateDashboard();
         }
     }
 
-    function setFilter(filter) {
-        currentFilter = filter;
+    function setStatusFilter(filter) {
+        currentStatusFilter = filter;
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`filter-${filter}`).classList.add('active');
         updateDashboard();
     }
 
+    // UPDATE TAMPILAN DASHBOARD, FILTER HALAMAN, & GRAFIK PROGRES
     function updateDashboard() {
         const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
         const ul = document.getElementById("taskList");
         ul.innerHTML = "";
 
-        document.getElementById("totalTasks").innerText = tasks.length;
-        document.getElementById("completedTasks").innerText = tasks.filter(t => t.completed).length;
-        document.getElementById("pendingTasks").innerText = tasks.length - tasks.filter(t => t.completed).length;
+        // 1. FILTER BERDASARKAN HALAMAN TAB AKTIF
+        const pageTasks = tasks.filter(t => currentPage === 'all' || t.category === currentPage);
 
-        tasks.forEach(task => {
-            if (currentFilter === 'pending' && task.completed) return;
-            if (currentFilter === 'completed' && !task.completed) return;
+        // 2. HITUNG PROGRESS GRAFIK BERDASARKAN HALAMAN TAB AKTIF
+        const total = pageTasks.length;
+        const completed = pageTasks.filter(t => t.completed).length;
+        const pending = total - completed;
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        // Set Angka Teks Statistik
+        document.getElementById("statTotal").innerText = total;
+        document.getElementById("statPending").innerText = pending;
+        document.getElementById("statCompleted").innerText = completed;
+        document.getElementById("visualPercent").innerText = `${percent}%`;
+
+        // Atur Animasi Mengalir Ring Grafik SVG (Keliling lingkaran = 2 * pi * r = 2 * 3.14 * 55 = ~345)
+        const ringOffset = 345 - (345 * percent) / 100;
+        document.getElementById("visualRing").style.strokeDashoffset = ringOffset;
+
+        // 3. FILTER LANJUTAN BERDASARKAN STATUS (Semua/Tertunda/Selesai)
+        pageTasks.forEach(task => {
+            if (currentStatusFilter === 'pending' && task.completed) return;
+            if (currentStatusFilter === 'completed' && !task.completed) return;
 
             const li = document.createElement("li");
             li.setAttribute("id", `task-${task.id}`);
             li.className = `cat-${task.category} ${task.completed ? 'completed' : ''}`;
             
-            let labelKategori = "";
-            if(task.category === 'JIP') labelKategori = "Pengelolaan JIP";
-            else if(task.category === 'SPLP') labelKategori = "Pengelolaan SPLP";
-            else if(task.category === 'PDN') labelKategori = "Pengelolaan PDN";
-            else if(task.category === 'Portal') labelKategori = "Portal Pelayanan";
-            else labelKategori = "Umum";
+            let labelKategori = task.category === 'Umum' ? 'Umum' : `Pengelolaan ${task.category}`;
 
             li.innerHTML = `
                 <div class="task-details">
                     <span class="task-title">${task.name}</span>
                     <div class="task-meta">
-                        <span>⏱️ Target: ${task.time}</span>
+                        <span>⏱️ Batas: ${task.time}</span>
                         <span class="badge badge-cat bg-cat-${task.category}">${labelKategori}</span>
-                        <span class="badge bg-priority-${task.priority}">Prioritas: ${task.priority}</span>
+                        <span class="badge bg-priority-${task.priority}">${task.priority}</span>
                     </div>
                 </div>
                 <div class="action-area">
@@ -480,6 +427,31 @@
         });
 
         checkDeadlines();
+    }
+
+    // MONITOR SANGAT SEGERA / CRITICAL ALERTS DI HALAMAN YANG DIPILIH
+    function checkDeadlines() {
+        const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
+        const sekarang = new Date();
+        let adaKritisDiHalamanIni = false;
+
+        tasks.forEach(task => {
+            if (!task.completed && task.rawTime) {
+                const batasWaktu = new Date(task.rawTime);
+                const selisihJam = (batasWaktu - sekarang) / (1000 * 60 * 60);
+
+                if (selisihJam <= 1) {
+                    // Jika tugas ini masuk dalam cakupan halaman tab yang sedang dibuka
+                    if (currentPage === 'all' || task.category === currentPage) {
+                        adaKritisDiHalamanIni = true;
+                    }
+                    const el = document.getElementById(`task-${task.id}`);
+                    if (el) el.classList.add("critical-alert");
+                }
+            }
+        });
+
+        document.getElementById("alertBanner").style.display = adaKritisDiHalamanIni ? "block" : "none";
     }
 </script>
 
