@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asisten Jadwal Harian Saya</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 25px;
+        }
+        li {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #007bff;
+        }
+        li.completed {
+            border-left-color: #28a745;
+            background-color: #e2e3e5;
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        .task-info {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .task-time {
+            font-size: 12px;
+            color: #777;
+            display: block;
+            margin-top: 4px;
+        }
+        .action-btns input {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Asisten Jadwal & Tugas</h2>
+    
+    <!-- Form Tambah Tugas -->
+    <div class="form-group">
+        <label for="taskName">Nama Pekerjaan/Tugas:</label>
+        <input type="text" id="taskName" placeholder="Contoh: Rapat dengan tim marketing">
+    </div>
+    
+    <div class="form-group">
+        <label for="taskTime">Waktu & Tanggal Jalankan:</label>
+        <input type="datetime-local" id="taskTime">
+    </div>
+    
+    <button onclick="addTask()">Simpan Jadwal</button>
+
+    <!-- Daftar Tugas -->
+    <ul id="taskList"></ul>
+</div>
+
+<script>
+    // Fungsi untuk memuat tugas dari penyimpanan browser saat web dibuka
+    document.addEventListener("DOMContentLoaded", loadTasks);
+
+    function addTask() {
+        const nameInput = document.getElementById("taskName");
+        const timeInput = document.getElementById("taskTime");
+
+        if (nameInput.value.trim() === "" || timeInput.value === "") {
+            alert("Mohon isi nama pekerjaan dan waktunya!");
+            return;
+        }
+
+        const task = {
+            id: Date.now(),
+            name: nameInput.value,
+            time: formatTime(timeInput.value),
+            completed: false
+        };
+
+        saveTaskToStorage(task);
+        renderTask(task);
+
+        // Kosongkan form setelah disimpan
+        nameInput.value = "";
+        timeInput.value = "";
+    }
+
+    function formatTime(dateTimeStr) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        return new Date(dateTimeStr).toLocaleDateString('id-ID', options);
+    }
+
+    function renderTask(task) {
+        const ul = document.getElementById("taskList");
+        const li = document.createElement("li");
+        li.setAttribute("id", task.id);
+        if (task.completed) li.classList.add("completed");
+
+        li.innerHTML = `
+            <div class="task-info">
+                <strong>${task.name}</strong>
+                <span class="task-time">⏰ ${task.time}</span>
+            </div>
+            <div class="action-btns">
+                <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})">
+            </div>
+        `;
+        ul.appendChild(li);
+    }
+
+    function toggleTask(id) {
+        let tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
+        tasks = tasks.map(task => {
+            if (task.id === id) {
+                task.completed = !task.completed;
+                const element = document.getElementById(id);
+                if (task.completed) {
+                    element.classList.add("completed");
+                } else {
+                    element.classList.remove("completed");
+                }
+            }
+            return task;
+        });
+        localStorage.setItem("myTasks", JSON.stringify(tasks));
+    }
+
+    function saveTaskToStorage(task) {
+        const tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
+        tasks.push(task);
+        localStorage.setItem("myTasks", JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
+        tasks.forEach(task => renderTask(task));
+    }
+</script>
+
+</body>
+</html>
