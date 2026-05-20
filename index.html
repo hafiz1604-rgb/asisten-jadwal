@@ -225,11 +225,9 @@
         const query = inputEl.value.trim();
         if (query === "") return;
 
-        // Tampilkan chat user
         appendMessage(query, 'user');
         inputEl.value = "";
 
-        // Efek loading mengetik AI
         setTimeout(() => {
             const tasks = JSON.parse(localStorage.getItem("spbeDashboardTasks")) || [];
             const q = query.toLowerCase();
@@ -237,7 +235,6 @@
 
             const totalBelumSelesai = tasks.filter(t => !t.completed);
 
-            // 1. Cek Pertanyaan Jadwal Umum / Hari Ini
             if (q.includes("jadwal") || q.includes("agenda") || q.includes("pekerjaan") || q.includes("tugas")) {
                 let filterKategori = null;
                 if (q.includes("jip")) filterKategori = "JIP";
@@ -258,7 +255,6 @@
                     });
                 }
             } 
-            // 2. Cek waktu spesifik besok
             else if (q.includes("besok")) {
                 const besokTasks = totalBelumSelesai.filter(t => t.name.toLowerCase().includes("besok"));
                 if (besokTasks.length === 0) {
@@ -268,11 +264,9 @@
                     besokTasks.forEach((t, i) => { jawaban += `- ${t.name} (${t.time})<br>`; });
                 }
             }
-            // 3. Respon Sapaan / Iseng
             else if (q.includes("halo") || q.includes("hai") || q.includes("pagi") || q.includes("siang")) {
                 jawaban = "Halo! Ada yang bisa saya bantu perihal pengecekan jadwal kerja Anda hari ini?";
             } 
-            // 4. Default kalau bingung
             else {
                 jawaban = "Maaf, saya kurang memahami pertanyaan itu. Anda bisa bertanya seperti: <i>'Ada jadwal apa saja?'</i>, <i>'Apakah ada tugas PDN?'</i>, atau <i>'Ada tugas besok?'</i>.";
             }
@@ -290,7 +284,6 @@
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // FUNGSI UTAMA TRACK DASHBOARD (Sama seperti sebelumnya)
     function switchPage(pageCode) {
         currentPage = pageCode;
         document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
@@ -436,7 +429,7 @@
         tasks.forEach(task => {
             if (!task.completed && task.rawTime) {
                 const batasWaktu = new Date(task.rawTime);
-                const selisihJam = (batasWaktu - aerospace = batasWaktu - sekarang) / (1000 * 60 * 60);
+                const selisihJam = (batasWaktu - sekarang) / (1000 * 60 * 60);
 
                 if (selisihJam <= 1) {
                     if (currentPage === 'all' || task.category === currentPage) adaKritisDiHalamanIni = true;
